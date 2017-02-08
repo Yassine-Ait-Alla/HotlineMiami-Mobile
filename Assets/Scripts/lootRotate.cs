@@ -1,14 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class lootRotate : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
+public class lootRotate : MonoBehaviour
+{
 	void Update ()
 	{
 		transform.Rotate(Vector3.forward * Time.deltaTime * 50);

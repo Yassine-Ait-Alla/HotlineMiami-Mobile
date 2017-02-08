@@ -8,10 +8,11 @@ public class player : MonoBehaviour
 	public VirtualJoystick			shooter;
 	public GameObject				Pfire;
 	public GameObject				fire;
-	public float					delay = 0.1f;
 	public static int				life = 4;
 	public int						haha = 50;
-
+	private float					mytime = 0.0f;
+	private float					delay = 0.3f;
+	private float					nextShot = 0.3f;
 
 	public static Transform			pp;
 	public static Vector3			dir2 = Vector3.zero;
@@ -21,16 +22,24 @@ public class player : MonoBehaviour
 	
 	public static bool						bastos = false;
 
+
+	void Update()
+	{
+		mytime += Time.deltaTime;
+		dir = Vector3.zero;
+
+		//Shoot action
+		if (mytime > delay)
+			Shoot();
+
+	}
+
 	void FixedUpdate ()
 	{
 		pp = transform;
-		dir = Vector3.zero;
 
 		//Move player
 		Move();
-
-		//Shoot action
-		Shoot();
 
 		if (Input.GetKey ("d"))
 			transform.Translate(Vector2.right * (5 * Time.deltaTime), Space.World);
@@ -42,11 +51,40 @@ public class player : MonoBehaviour
 			transform.Translate(Vector2.down * (5 * Time.deltaTime), Space.World);
 
 		transform.Translate(dir / 8);
-		//transform.Translate(transform.position.x, transform.position.y, 0);
 
 		Die();
 	}
 
+	public void	Shoot()
+	{
+		Vector3		pos = this.transform.position;
+
+		if (shooter.InputDirection != Vector3.zero)
+		{
+
+			nextShot = mytime + delay;
+
+			//shoot direction
+			dir2 = shooter.InputDirection;
+			float AngleRad = Mathf.Atan2(dir2.y, dir2.x);
+			float AngleDeg = (180 / Mathf.PI) * AngleRad;
+			this.transform.rotation = Quaternion.Euler(0, 0, (AngleDeg + 84));
+			moveJoystick.transform.rotation = Quaternion.Euler(0, 0, (AngleDeg + 84));
+
+			/*
+			if (bastos == false)
+			{
+			*/
+				fire = (GameObject)GameObject.Instantiate(Pfire, pos, Quaternion.identity);
+				Physics2D.IgnoreCollision(fire.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+				bastos = true;
+				/*
+			}
+			*/
+				nextShot = nextShot - mytime;
+				mytime = 0f;;
+		}
+	}
 
 	public void Die()
 	{
@@ -64,67 +102,19 @@ public class player : MonoBehaviour
 
 	public void	Move()
 	{
-		float		ajust = transform.rotation.z;
-
-		Debug.Log(moveJoystick.InputDirection.z);
-		//Debug.Log(transform.rotation.z);
 		if (moveJoystick.InputDirection != Vector3.zero)
 		{
-			//dir = moveJoystick.InputDirection.normalized;
 			dir.x = moveJoystick.InputDirection.x - transform.rotation.x;
 			dir.y = moveJoystick.InputDirection.y - transform.rotation.y;
-			/*
-			if (ajust > 0)
-				dir.z -= ajust;
-			else
-				dir.z += ajust;
-				*/
-		}
-	}
-
-	public void	Shoot()
-	{
-		Vector3		pos = this.transform.position;
-
-		if (shooter.InputDirection != Vector3.zero)
-		{
-			//shoot direction
-			dir2 = shooter.InputDirection;
-			float AngleRad = Mathf.Atan2(dir2.y, dir2.x);
-			float AngleDeg = (180 / Mathf.PI) * AngleRad;
-			this.transform.rotation = Quaternion.Euler(0, 0, (AngleDeg + 84));
-			moveJoystick.transform.rotation = Quaternion.Euler(0, 0, (AngleDeg + 84));
-
-			if (bastos == false)
-			{
-				fire = (GameObject)GameObject.Instantiate(Pfire, pos, Quaternion.identity);
-				Physics2D.IgnoreCollision(fire.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-				bastos = true;
-			}
 		}
 	}
 
 	void OnCollisionEnter2D(Collision2D col)
 	{
-		//Debug.Log(col.gameObject.name);
 		if (col.gameObject.name == "bullet2(Clone)")
 		{
 			life--;
 			GameObject.Find("lifeRect" + life).SetActive(false);
 		}
-			//Debug.Log("lol");
 	}
-
-	/*
-	IEnumerator		shoot(Vector3 pos, Vector3 dir)
-	{
-		fire = (GameObject)GameObject.Instantiate(Pfire, pos, Quaternion.identity);
-
-		fire.transform.Translate(dir * Time.deltaTime * 10);
-
-		yield return new WaitForSeconds(delay);
-		GameObject.Destroy(fire);
-		this.routine = null;
-	}
-	*/
 }

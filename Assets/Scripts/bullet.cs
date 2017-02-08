@@ -32,7 +32,6 @@ public class bullet : MonoBehaviour {
 
 	public void		OnCollisionEnter2D(Collision2D col)
 	{
-		//Debug.Log("Collisio: " + col.gameObject.name);
 		end = true;
 		player.bastos = false;
 	}

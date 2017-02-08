@@ -8,7 +8,6 @@ public class enemy : MonoBehaviour
 	public Vector3				target;
 	public float				angle;
 	public Quaternion			quat;
-	//public Transform			pos;
 
 
 	public GameObject			fire;
@@ -24,8 +23,6 @@ public class enemy : MonoBehaviour
 	{
 		if (agro)
 		{
-			//Debug.Log(pos);
-
 			target = player.pp.position;
 			Vector3 dir = target - transform.position;
 			angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;

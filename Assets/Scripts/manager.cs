@@ -43,12 +43,4 @@ public class manager : MonoBehaviour
 	{
 		SceneManager.LoadScene(currentLVL.ToString() + "_level");
 	}
-
-	/*
-	void Start ()
-	{}
-	
-	void Update ()
-	{}
-	*/
 }
