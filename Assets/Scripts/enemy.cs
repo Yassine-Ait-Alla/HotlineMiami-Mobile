@@ -3,7 +3,7 @@ using System.Collections;
 
 public class enemy : MonoBehaviour
 {
-	public static bool			agro = true;
+	public static bool			agro = false;
 
 	public Vector3				target;
 	public float				angle;

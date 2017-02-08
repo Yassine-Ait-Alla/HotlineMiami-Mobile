@@ -3,13 +3,12 @@ using System.Collections;
 
 public class badBullet : MonoBehaviour {
 
-	public Transform			targete;
-	public Vector3				target =  player.pp.position;
+	public Vector3				target;
 	//public AudioSource	son;
 
 	void Start ()
 	{
-		//target = player.pp.position;
+		target = player.pp.position;
 	}
 
 	void Update ()
@@ -20,10 +19,11 @@ public class badBullet : MonoBehaviour {
 
 		Vector3 dir = target - transform.position;
 
+		/*
 		float		y = dir.y;
 		float		x = dir.x;
-
 		Debug.Log("X = " + x + " Y = " + y);
+		*/
 
 		float	angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 		transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
